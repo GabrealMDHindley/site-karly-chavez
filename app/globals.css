@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  @apply bg-ink text-paper font-sans antialiased;
+}
+
+::selection {
+  background-color: #f0818a;
+  color: #161120;
+}
+
+.eyebrow {
+  @apply text-xs uppercase text-muted;
+  letter-spacing: 0.18em;
+}
+
+.coral-gradient-text {
+  background-image: linear-gradient(100deg, #f0818a, #f3a699);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-fallback-glow {
+  background:
+    radial-gradient(ellipse 60% 50% at 70% 40%, rgba(240, 129, 138, 0.14), transparent 70%),
+    radial-gradient(ellipse 40% 40% at 30% 70%, rgba(243, 166, 153, 0.08), transparent 70%);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
