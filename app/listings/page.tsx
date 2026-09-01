@@ -1,37 +1,39 @@
 import type { Metadata } from "next";
-import Reveal from "@/components/Reveal";
-import ListingCard from "@/components/ListingCard";
-import { listings, getListingPhotos } from "@/lib/listings";
+import { Suspense } from "react";
+import PageHero from "@/components/PageHero";
+import ListingsExplorer from "@/components/ListingsExplorer";
+import CTABanner from "@/components/CTABanner";
+import { listings } from "@/lib/listings";
+import { getListingPhotos } from "@/lib/listings-server";
 
 export const metadata: Metadata = {
-  title: "Listings",
+  title: "Home Search — Listings & Past Sales",
   description:
-    "Current listings from Karly Chavez and Key Connections Real Estate — Southern California homes across San Diego, Riverside, and Los Angeles counties.",
+    "Search every property represented by Key Connections Real Estate — current listings and past transactions across San Diego County. Filter by price, beds, baths, city, and more.",
 };
 
 export default function ListingsPage() {
+  const photos = Object.fromEntries(
+    listings.map((l) => [l.slug, getListingPhotos(l.slug)[0]])
+  );
+
   return (
-    <div className="pt-16">
-      <section className="mx-auto max-w-6xl px-5 py-20">
-        <Reveal>
-          <p className="eyebrow">Portfolio</p>
-          <h1 className="mt-2 font-display text-5xl">Listings</h1>
-          <p className="mt-4 max-w-xl text-muted">
-            Every home, presented the way it deserves.
-          </p>
-        </Reveal>
-        <div className="mt-12 grid gap-8 md:grid-cols-2">
-          {listings.map((l, i) => (
-            <Reveal key={l.slug} delay={i * 0.08}>
-              <ListingCard
-                listing={l}
-                leadPhoto={getListingPhotos(l.slug)[0]}
-                priority={i === 0}
-              />
-            </Reveal>
-          ))}
-        </div>
+    <div>
+      <PageHero
+        eyebrow="Home Search"
+        title="Find your place"
+        intro="Browse every property we represent — filter by price, beds, baths, city, and status, or switch to the map to explore by neighborhood. Not finding what you're looking for? We search the full MLS for our clients — reach out and we'll curate listings to your needs."
+        compact
+      />
+      <section className="mx-auto max-w-shell px-5 py-14">
+        <Suspense>
+          <ListingsExplorer listings={listings} photos={photos} />
+        </Suspense>
       </section>
+      <CTABanner
+        title="Want first look at new inventory?"
+        body="We proactively notify our buyers of new inventory — sometimes before it hits the market. Tell us what you're looking for and we'll curate listings to your needs."
+      />
     </div>
   );
 }

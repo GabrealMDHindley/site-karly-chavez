@@ -1,5 +1,4 @@
-import { existsSync, readdirSync } from "node:fs";
-import path from "node:path";
+export type ListingStatus = "For Sale" | "Sold";
 
 export type Listing = {
   slug: string;
@@ -11,18 +10,38 @@ export type Listing = {
   beds: number;
   baths: number;
   sqft: number;
+  lot: string | null;
   yearBuilt: number;
-  status: string;
-  hoa: string;
+  status: ListingStatus;
+  propertyType: "Residential" | "Multi-Family";
+  neighborhood: string | null;
+  stories: number | null;
+  garage: string | null;
+  pool: string | null;
+  roof: string | null;
+  parking: string | null;
+  heat: string | null;
+  cooling: string | null;
+  sewer: string | null;
+  water: string | null;
+  zoning: string | null;
+  laundry: string | null;
+  flooring: string | null;
+  fireplace: string | null;
+  appliances: string | null;
+  hoa: string | null;
   mls: string;
+  lat: number;
+  lng: number;
+  featured?: boolean;
   description: string;
   features: string[];
   attribution: string;
   sourceUrl: string;
 };
 
-// Data scraped verbatim from the source listing — see the studio's
-// clients/key-connections/karly-chavez/assets/listings/5-spinnaker-way/details.md
+// Listing data migrated verbatim from keyconnectionsrealty.com/properties/*
+// (descriptions, facts, and photos). Photos live in public/listings/<slug>/.
 export const listings: Listing[] = [
   {
     slug: "5-spinnaker-way",
@@ -34,10 +53,30 @@ export const listings: Listing[] = [
     beds: 4,
     baths: 5,
     sqft: 3800,
+    lot: null,
     yearBuilt: 2001,
     status: "For Sale",
+    propertyType: "Residential",
+    neighborhood: "Coronado Cays",
+    stories: null,
+    garage: null,
+    pool: null,
+    roof: null,
+    parking: null,
+    heat: null,
+    cooling: null,
+    sewer: null,
+    water: null,
+    zoning: null,
+    laundry: null,
+    flooring: null,
+    fireplace: null,
+    appliances: null,
     hoa: "$209.25 / month",
     mls: "260005977",
+    lat: 32.6200448,
+    lng: -117.1286138,
+    featured: true,
     description:
       "Experience the best of waterfront living in the Coronado Cays. Perfectly positioned on a quiet cul de sac, this exceptional bayfront residence showcases breathtaking panoramic views of the bay, mountains, and glittering city lights. Designed for effortless indoor outdoor living, expansive sliding glass doors open to a spectacular waterfront patio and lush tropical grounds ideal for entertaining or enjoying peaceful sunsets over the water. Elegant living spaces, a beautifully appointed chef’s kitchen, and a luxurious primary suite with sweeping bay views create a refined yet relaxed coastal retreat. Enjoy paddleboarding and kayaking from your backyard while embracing the resort inspired lifestyle that makes the Coronado Cays one of Southern California’s most coveted waterfront communities.",
     features: [
@@ -55,44 +94,516 @@ export const listings: Listing[] = [
     sourceUrl:
       "https://keyconnectionsrealty.com/home-search/listings/4413514073344745564-5-Spinnaker-Way",
   },
+  {
+    slug: "2361-calle-tortuosa",
+    address: "2361 Calle Tortuosa",
+    city: "San Diego",
+    state: "CA",
+    zip: "92139",
+    price: 749999,
+    beds: 4,
+    baths: 2,
+    sqft: 1262,
+    lot: "6,098 Sq.Ft.",
+    yearBuilt: 1959,
+    status: "For Sale",
+    propertyType: "Residential",
+    neighborhood: "San Diego County",
+    stories: 1,
+    garage: "2.0",
+    pool: null,
+    roof: "Composition",
+    parking: "Attached, Garage",
+    heat: "Wall/Gravity",
+    cooling: null,
+    sewer: "Sewer Connected",
+    water: "Available",
+    zoning: "RS-1-7",
+    laundry: "Washer Hookup",
+    flooring: "Wood",
+    fireplace: null,
+    appliances: "Dishwasher, Disposal, Refrigerator",
+    hoa: null,
+    mls: "260019019",
+    lat: 32.679903,
+    lng: -117.054332,
+    description:
+      "Welcome to this charming single-story home at 2361 Calle Tortuosa in San Diego. Built in 1959, this residence offers a comfortable and inviting living space with 1,262 square feet of interior space on a spacious 6,100 square foot lot. The home features four bedrooms and 2 bathrooms, with beautifully hardwood floors throughout and ceramic tile floors in the kitchen and bathrooms. The exterior has been freshly painted. Additional features include a a fenced backyard with a concrete patio slab, and a two-car garage. Located in a desirable San Diego neighborhood, this property is conveniently close to good schools , offering a wonderful opportunity !",
+    features: [
+      "Charming single-story layout",
+      "Hardwood floors throughout",
+      "Ceramic tile in kitchen and bathrooms",
+      "Freshly painted exterior",
+      "Fenced backyard with concrete patio slab",
+      "Two-car attached garage",
+      "Spacious 6,100 sq.ft. lot",
+      "Close to good schools",
+    ],
+    attribution:
+      "Source: San Diego MLS #260019019 via keyconnectionsrealty.com.",
+    sourceUrl:
+      "https://keyconnectionsrealty.com/properties/2361-calle-tortuosa-san-diego-ca-us-92139-260019019",
+  },
+  {
+    slug: "2373-carroll-ln",
+    address: "2373 Carroll Ln",
+    city: "Escondido",
+    state: "CA",
+    zip: "92027",
+    price: 899999,
+    beds: 5,
+    baths: 3,
+    sqft: 2798,
+    lot: null,
+    yearBuilt: 1970,
+    status: "For Sale",
+    propertyType: "Residential",
+    neighborhood: "San Diego County",
+    stories: 2,
+    garage: "2.0",
+    pool: null,
+    roof: "Shingle",
+    parking: null,
+    heat: "Forced Air Unit",
+    cooling: "Central Forced Air",
+    sewer: "Septic Installed, Sewer Available",
+    water: "Available, Public",
+    zoning: "A70",
+    laundry: "Gas, Electric Dryer HU",
+    flooring: null,
+    fireplace: "FP in Family Room, FP in Living Room",
+    appliances: "Dishwasher",
+    hoa: null,
+    mls: "260009183",
+    lat: 33.1238893,
+    lng: -117.0332939,
+    description:
+      "Seller Motivated!! SHORT SALE!!! This spacious 5-bedroom, 3-bath home offers the perfect blend of flexibility, comfort, and opportunity. With a functional layout and generous living spaces, there's room for everyone to spread out and feel at home. The lower level presents a unique opportunity to create a private rental unit or multigenerational living space--ideal for added income or extended family. Enjoy a sizable lot with space to relax or entertain, all while being conveniently located near shopping, dining, and easy freeway access. Homes with this much versatility don't come around often--don't miss your chance to make it your. Close to top-rated schools, parks, shopping, and freeway access.",
+    features: [
+      "Seller motivated — short sale",
+      "Spacious functional layout with generous living areas",
+      "Lower level ideal for a private rental unit or multigenerational living",
+      "Fireplaces in family room and living room",
+      "Sizable lot with room to relax or entertain",
+      "Close to top-rated schools, parks, and shopping",
+      "Easy freeway access",
+    ],
+    attribution:
+      "Source: San Diego MLS #260009183 via keyconnectionsrealty.com.",
+    sourceUrl:
+      "https://keyconnectionsrealty.com/properties/2373-carroll-ln-escondido-ca-92027-260009183",
+  },
+  {
+    slug: "3666-72-main-st",
+    address: "3666-72 Main St",
+    city: "San Diego",
+    state: "CA",
+    zip: "92113",
+    price: 1150000,
+    beds: 4,
+    baths: 4,
+    sqft: 1656,
+    lot: "6,970 Sq.Ft.",
+    yearBuilt: 1941,
+    status: "For Sale",
+    propertyType: "Multi-Family",
+    neighborhood: "San Diego County",
+    stories: 1,
+    garage: null,
+    pool: null,
+    roof: "Composition",
+    parking: "Gated lot — space for 8 full-size vehicles",
+    heat: null,
+    cooling: null,
+    sewer: null,
+    water: null,
+    zoning: "Industrial",
+    laundry: null,
+    flooring: null,
+    fireplace: null,
+    appliances: null,
+    hoa: null,
+    mls: "260019021",
+    lat: 32.686114,
+    lng: -117.115629,
+    description:
+      "Don't miss this rare opportunity to own 4 detached homes on a single parcel. This property has been expertly updated to minimize owner effort, featuring , stucco, and fascia, and paint on all four dwellings. One unit is entirely new, featuring a full remodel including updated electrical, plumbing, modern kitchen and bath, new flooring, windows.The grounds are meticulously landscaped and secured with a new locking gate, which has been a major hit with current occupants. The property includes a large, gated parking lot with space for 8 full-size vehicles. A fantastic, turn-key investment.",
+    features: [
+      "4 detached homes on a single parcel",
+      "One unit fully remodeled — electrical, plumbing, kitchen, bath",
+      "New stucco, fascia, and paint on all four dwellings",
+      "Meticulously landscaped, secured grounds",
+      "New locking gate",
+      "Large gated parking lot for 8 full-size vehicles",
+      "Turn-key investment",
+    ],
+    attribution:
+      "Source: San Diego MLS #260019021 via keyconnectionsrealty.com.",
+    sourceUrl:
+      "https://keyconnectionsrealty.com/properties/3666-72-main-san-diego-ca-us-92113-260019021",
+  },
+  {
+    slug: "74-vallecitos-way",
+    address: "74 Vallecitos Way",
+    city: "Chula Vista",
+    state: "CA",
+    zip: "91910",
+    price: 895000,
+    beds: 4,
+    baths: 2,
+    sqft: 1424,
+    lot: ".23 Acres",
+    yearBuilt: 1958,
+    status: "For Sale",
+    propertyType: "Residential",
+    neighborhood: "Chula Vista",
+    stories: 1,
+    garage: null,
+    pool: "Below Ground, Private",
+    roof: "Composition",
+    parking: "RV / boat space",
+    heat: "Wall/Gravity",
+    cooling: null,
+    sewer: "Septic Installed",
+    water: "Available",
+    zoning: "R-1: Single",
+    laundry: "Washer Hookup",
+    flooring: null,
+    fireplace: null,
+    appliances:
+      "Dishwasher, Disposal, Microwave, Range/Oven, Built In Range, Gas Range",
+    hoa: null,
+    mls: "260014109",
+    lat: 32.629130398841,
+    lng: -117.065058900484,
+    description:
+      "Welcome to your new Chula Vista retreat! This charming single-story residence corner lot, 1,424 square feet of bright and inviting living space. This home welcomes you with beautifully updated interiors, flowing seamlessly into a modern kitchen equipped with pristine quartz countertops, white wood cabinetry, and a gas range, and PAID OFF SOLAR! The true highlight of this property awaits outside: a .23 acre lot featuring a sparkling private in-ground pool. Whether you want to host summer pool parties or take advantage of the expansive space for an ADU, the possibilities are endless. Complete with tastefully all New electrical, recessed lighting, updated bathrooms with updated mirrors, luxury refrigerator, stainless steel appliances, NEW HVAC, NEW Roof, NEW Pool gas heating, and a RV/boat space, paid off TESLA Solar panels, battery and EV Charger, this home combines charm with stunning contemporary upgrades. Located in a highly desirable area, this is a must see!",
+    features: [
+      "Single-story corner lot",
+      "Private in-ground pool with new gas heating",
+      "Paid-off Tesla solar panels, battery, and EV charger",
+      "Modern kitchen — quartz countertops, white wood cabinetry, gas range",
+      "All-new electrical and recessed lighting",
+      "New HVAC and new roof",
+      ".23-acre lot with ADU potential",
+      "RV / boat space",
+    ],
+    attribution:
+      "Source: San Diego MLS #260014109 via keyconnectionsrealty.com.",
+    sourceUrl:
+      "https://keyconnectionsrealty.com/properties/74-vallecitos-way-chula-vista-ca-us-91910-260014109",
+  },
+  {
+    slug: "2815-savannah-ct",
+    address: "2815 Savannah Ct",
+    city: "Chula Vista",
+    state: "CA",
+    zip: "91914",
+    price: 1400000,
+    beds: 4,
+    baths: 3,
+    sqft: 2825,
+    lot: "10,890 Sq.Ft.",
+    yearBuilt: 2004,
+    status: "Sold",
+    propertyType: "Residential",
+    neighborhood: "Rolling Hills Ranch",
+    stories: 2,
+    garage: "3.0",
+    pool: "Community",
+    roof: "Tile",
+    parking: "Garage (Attached, Tandem), Driveway",
+    heat: "Natural Gas, Fireplace(s), Forced Air",
+    cooling: "Central Air",
+    sewer: "Sewer Available",
+    water: "Meter on Property",
+    zoning: "R-1: Single",
+    laundry: "Laundry Room, Gas",
+    flooring: null,
+    fireplace: null,
+    appliances: "Dishwasher, Microwave, Double Oven, Gas Oven",
+    hoa: null,
+    mls: "220008937",
+    lat: 32.6629272,
+    lng: -116.9504818,
+    description:
+      "Beautiful and elegant home in the desirable Rolling Hills Ranch neighborhood. This bright and spacious home has an open floor plan with high vaulted ceilings. All three bedrooms are on the upper level, plus an optional bonus room downstairs with a full bath. Enjoy cooking in the spacious remodeled kitchen and entertain your guests in your beautiful landscaped private backyard with a built-in BBQ island. This elegant home with custom touches throughout and fresh customized painted interiors is located on a cul-de-sac with NO MELLO ROOS and LOW HOA! Experience with your family the Resort Style Living in this community that provides access to 5 different pools and spas, with playgrounds nearby. Walking distance from award winning elementary and middle schools, close to the golf course, shops, and solar panels system paid- off. Conveniently located right off the 125 freeway. This is definitely a must see home!",
+    features: [
+      "Open floor plan with high vaulted ceilings",
+      "Remodeled kitchen",
+      "Landscaped private backyard with built-in BBQ island",
+      "Cul-de-sac location — no Mello-Roos, low HOA",
+      "Community access to 5 pools and spas",
+      "Walking distance to award-winning schools",
+      "Paid-off solar panel system",
+    ],
+    attribution:
+      "Source: San Diego MLS #220008937 via keyconnectionsrealty.com.",
+    sourceUrl:
+      "https://keyconnectionsrealty.com/properties/2815-savannah-ct-chula-vista-ca-91914-220008937",
+  },
+  {
+    slug: "3600-s-bonita-st",
+    address: "3600 S Bonita St",
+    city: "Spring Valley",
+    state: "CA",
+    zip: "91977",
+    price: 1200000,
+    beds: 8,
+    baths: 4,
+    sqft: 3372,
+    lot: "0.26 Acres",
+    yearBuilt: 1974,
+    status: "Sold",
+    propertyType: "Multi-Family",
+    neighborhood: "Spring Valley",
+    stories: 2,
+    garage: null,
+    pool: null,
+    roof: "Composition",
+    parking: "Garage (Assigned), Non-Garage (Assigned)",
+    heat: "Natural Gas",
+    cooling: "Wall/Window Unit(s)",
+    sewer: null,
+    water: "Meter on Property",
+    zoning: "R-3: Restricted",
+    laundry: null,
+    flooring: null,
+    fireplace: null,
+    appliances: "Gas Water Heater, Range/Oven, Refrigerator, Washer",
+    hoa: null,
+    mls: "220006006",
+    lat: 32.7450436,
+    lng: -116.9838005,
+    description:
+      "4-UNIT INVESTMENT OPPORTUNITY AWAITS! Each unit is a 2 bed/1 bath unit. Well Maintained Multi-units. Perfect for the first time investor or savvy investor. Off street parking for the complex with plenty of parking. This is one that you don't want to miss. Easy to manage & centrally located in the county. All units are tenant occupied.",
+    features: [
+      "4-unit investment opportunity",
+      "Each unit 2 bed / 1 bath",
+      "Well-maintained multi-units",
+      "Off-street parking with plenty of spaces",
+      "Easy to manage",
+      "Centrally located in the county",
+      "All units tenant occupied",
+    ],
+    attribution:
+      "Source: San Diego MLS #220006006 via keyconnectionsrealty.com.",
+    sourceUrl:
+      "https://keyconnectionsrealty.com/properties/3600-s-bonita-st-spring-valley-ca-91977-220006006",
+  },
+  {
+    slug: "5189-arvinels-ave",
+    address: "5189 Arvinels Ave",
+    city: "San Diego",
+    state: "CA",
+    zip: "92117",
+    price: 1200000,
+    beds: 6,
+    baths: 4,
+    sqft: 2831,
+    lot: "6,900 Sq.Ft.",
+    yearBuilt: 1961,
+    status: "Sold",
+    propertyType: "Residential",
+    neighborhood: "North Clairemont Mesa",
+    stories: null,
+    garage: null,
+    pool: null,
+    roof: "Composition",
+    parking: "Off-street parking for 4 cars",
+    heat: "Forced Air Unit",
+    cooling: "Central Forced Air",
+    sewer: "Sewer Connected",
+    water: "Meter on Property",
+    zoning: null,
+    laundry: "Electric, Gas",
+    flooring: "Tile, Wood, Bamboo",
+    fireplace: "FP in Family Room",
+    appliances:
+      "Disposal, Dryer, Microwave, Range/Oven, Refrigerator, Washer, Gas Stove, Gas Range",
+    hoa: null,
+    mls: "230012086",
+    lat: 32.8402965,
+    lng: -117.1748107,
+    description:
+      "Wonderful North Clairemont Mesa Location! 4 BR 2BA home with a 2BR 1.5 BA, 1450 sf addition! Main house is all one level with gleaming wood floors and tile, freshly painted, new LED lightening, all new doors, tankless water heater, wood burning fireplace in family room, granite countertops a large laundry room, and central A/C. The 1450 sf addition w/2 BR 1.5 BA has an additional area at the top of the stairs for an office and view of neighboring MacDowell Park. Top quality interior includes: Central A/C, slab granite countertops, wood kitchen cabinets, bamboo flooring throughout, recessed LED lighting, dual pane windows and sliding glass doors, ceiling fans, stainless steel refrigerator, gas range, microwave and a full size washer/dryer. Home sits on low maintenance 6900 sf lot with off street parking for 4 cars. Centrally located and a short distance to UCSD, SDSU and USD, nearby shopping, and bus line. EZ freeway access.",
+    features: [
+      "4 BR / 2 BA main house plus 2 BR / 1.5 BA 1,450 sq.ft. addition",
+      "Single-level main house with wood floors and tile",
+      "Granite countertops and wood kitchen cabinets",
+      "Tankless water heater and central A/C",
+      "Wood-burning fireplace in family room",
+      "View of neighboring MacDowell Park",
+      "Off-street parking for 4 cars",
+      "Short distance to UCSD, SDSU, and USD",
+    ],
+    attribution:
+      "Source: San Diego MLS #230012086 via keyconnectionsrealty.com.",
+    sourceUrl:
+      "https://keyconnectionsrealty.com/properties/5189-arvinels-san-diego-ca-92117-230012086",
+  },
+  {
+    slug: "1974-meeks-bay-dr",
+    address: "1974 Meeks Bay Dr",
+    city: "Chula Vista",
+    state: "CA",
+    zip: "91913",
+    price: 1149000,
+    beds: 4,
+    baths: 3,
+    sqft: 2742,
+    lot: "0.28 Acres",
+    yearBuilt: 2003,
+    status: "Sold",
+    propertyType: "Residential",
+    neighborhood: "Chula Vista",
+    stories: 2,
+    garage: "2.0",
+    pool: "Community/Common",
+    roof: "Shingle",
+    parking: "Attached, Direct Garage Access, Garage - Front Entry",
+    heat: "Fireplace, Forced Air Unit",
+    cooling: "Central Forced Air",
+    sewer: "Public Sewer",
+    water: "Meter on Property",
+    zoning: "R-1: Single",
+    laundry: "Electric, Gas",
+    flooring: null,
+    fireplace: "FP in Family Room",
+    appliances:
+      "Convection Oven, Dishwasher, Disposal, Double Oven, Dryer, Garage Door Opener, Gas Stove, Ice Maker, Microwave, Pool/Spa/Equipment, Refrigerator, Self Cleaning Oven, Washer",
+    hoa: null,
+    mls: "250045503",
+    lat: 32.6385164,
+    lng: -116.9779269,
+    description:
+      "Welcome to this beautiful, move-in ready home that truly has it all. Located in a private gated community with resort-style amenities, pool, clubhouse, and community parks. Low HOA and Mello-Roos expiring in just a couple years. This property offers luxury, comfort, and space for every lifestyle. Elegant crown molding throughout the entire home, high ceilings creating an open, airy feel. Optional large 5th bedroom. Oversized walk-in closet with exceptional storage. Cozy fireplace. Huge 12,200+ SF backyard, ready for entertaining. Rare corner unit with extra privacy. Filled with natural light from large windows. Beautiful travertine tile flooring throughout the entire downstairs. Marble countertops in hallways upstairs. Elegant marble medallion design featured at the entrance. Located in a desirable neighborhood loved for its tranquility. This is more than a home, it's a lifestyle retreat.",
+    features: [
+      "Private gated community with resort-style amenities",
+      "Low HOA — Mello-Roos expiring soon",
+      "Elegant crown molding and high ceilings",
+      "Optional large 5th bedroom",
+      "Huge 12,200+ sq.ft. backyard",
+      "Rare corner unit with extra privacy",
+      "Travertine tile flooring downstairs",
+      "Marble medallion entrance design",
+    ],
+    attribution:
+      "Source: San Diego MLS #250045503 via keyconnectionsrealty.com.",
+    sourceUrl:
+      "https://keyconnectionsrealty.com/properties/1974-meeks-bay-dr-chula-vista-ca-91913-250045503",
+  },
+  {
+    slug: "1331-canon-perdido-st",
+    address: "1331 Canon Perdido Street",
+    city: "Chula Vista",
+    state: "CA",
+    zip: "91913",
+    price: 1105000,
+    beds: 5,
+    baths: 3,
+    sqft: 2615,
+    lot: null,
+    yearBuilt: 2015,
+    status: "Sold",
+    propertyType: "Residential",
+    neighborhood: "Chula Vista",
+    stories: 2,
+    garage: "2.0",
+    pool: "Community/Common",
+    roof: "Tile/Clay",
+    parking: "Garage",
+    heat: "Forced Air Unit",
+    cooling: "Central Forced Air",
+    sewer: "Sewer Connected",
+    water: "Meter on Property",
+    zoning: "R1",
+    laundry: "Gas, Washer Hookup",
+    flooring: "Linoleum/Vinyl",
+    fireplace: "FP in Family Room",
+    appliances:
+      "Dishwasher, Disposal, Dryer, Garage Door Opener, Microwave, Refrigerator, Solar Panels, 6 Burner Stove, Convection Oven, Double Oven, Freezer, Gas Oven, Gas Stove",
+    hoa: null,
+    mls: "250028261",
+    lat: 32.6162639,
+    lng: -116.997155,
+    description:
+      "A truly exceptional 5-bedroom, 3-bathroom home in Chula Vista, California, offering 2,615 sq. ft. of meticulously upgraded living space. This property boasts a prime location facing a serene park, ensuring no direct front neighbors. The exterior features a welcoming front porch with artificial turf and a sturdy retaining wall that separates a spacious front driveway for ample parking. Step inside to discover an open floor plan, where every detail has been thoughtfully enhanced: new flooring throughout the entire home, a gourmet kitchen with a cooktop, double oven, microwave, refrigerator, and a large kitchen island; elegant crown molding, stylish shutters throughout and the convenience of a downstairs bedroom and full bathroom. A large sliding door overlooking the backyard floods the space with natural light. The upper level offers a blend of comfort and functionality, with a built-in cabinet office space that includes the convenience of a wine fridge and microwave. The master bedroom is a luxurious sanctuary, with a large ceiling fan, expansive space, and a dedicated walk-in closet for her and a large closet for him, and an en-suite bathroom boasting a dual sink vanity for two, a large central tub for ultimate relaxation, and a private toilet room. Equipped with cutting-edge upgrades that enhance efficiency and convenience, include paid-off solar (Sempre Solaris system). A dedicated car charger and battery, and an efficient tankless water heater. This stunning residence is meticulously upgraded from top to bottom and offers an unparalleled living experience.",
+    features: [
+      "Prime location facing a serene park — no direct front neighbors",
+      "Open floor plan with new flooring throughout",
+      "Gourmet kitchen with large island and double oven",
+      "Downstairs bedroom and full bathroom",
+      "Built-in office with wine fridge",
+      "Luxurious primary suite with dual walk-in closets",
+      "Paid-off solar with battery and EV charger",
+      "Tankless water heater",
+    ],
+    attribution:
+      "Source: San Diego MLS #250028261 via keyconnectionsrealty.com.",
+    sourceUrl:
+      "https://keyconnectionsrealty.com/properties/1331-canon-perdido-street-chula-vista-ca-91913-250028261",
+  },
+  {
+    slug: "7222-princeton-ave",
+    address: "7222 Princeton Ave",
+    city: "La Mesa",
+    state: "CA",
+    zip: "91942",
+    price: 1100000,
+    beds: 4,
+    baths: 3,
+    sqft: 1945,
+    lot: null,
+    yearBuilt: 1947,
+    status: "Sold",
+    propertyType: "Residential",
+    neighborhood: "Rolando Village",
+    stories: 2,
+    garage: null,
+    pool: null,
+    roof: "Composition",
+    parking: "Assigned",
+    heat: "Forced Air Unit",
+    cooling: "Central Forced Air",
+    sewer: "Sewer Connected",
+    water: "Meter on Property",
+    zoning: "R-1: Single",
+    laundry: "Gas",
+    flooring: null,
+    fireplace: null,
+    appliances:
+      "Dishwasher, Dryer, Microwave, Range/Oven, Refrigerator, Washer, Gas Range, Gas Cooking",
+    hoa: null,
+    mls: "260008067",
+    lat: 32.760532,
+    lng: -117.041819,
+    description:
+      "Discover the perfect blend of flexibility and value at 7222 Princeton Ave. This beautiful property is turn key and move in ready with PAID OFF SOLAR. Situated in the charming Rolando pocket of La Mesa, this unique property offers an incredible opportunity for homeowners and savvy investors alike. Whether you are looking for a spacious multi-generational compound, a primary residence with significant rental offsets, or a high-performing three-unit investment, this property delivers. Located in the heart of the charming Rolando Village neighborhood of La Mesa. This versatile property is thoughtfully configured into three distinct living spaces, making it a perfect fit for a multi-generational family or a high-yield investment portfolio. The main residence features a spacious 3-bedroom, 1-bathroom layout, complemented by a private 1-bedroom, 1-bathroom downstairs unit and a stylishly converted garage studio. Exceptional privacy is a hallmark of this property, as all three units boast their own dedicated yards, upgraded kitchens, flooring, recessed lighting, appliances, and individual washers and dryers. A turnkey setup, this home is ready for immediate occupancy.",
+    features: [
+      "Turn-key and move-in ready with paid-off solar",
+      "Three distinct living spaces",
+      "Main residence: 3 bed / 1 bath",
+      "Private 1 bed / 1 bath downstairs unit",
+      "Stylishly converted garage studio",
+      "Each unit with dedicated yard and upgraded kitchen",
+      "Individual washers and dryers per unit",
+      "Charming Rolando Village neighborhood",
+    ],
+    attribution:
+      "Source: San Diego MLS #260008067 via keyconnectionsrealty.com.",
+    sourceUrl:
+      "https://keyconnectionsrealty.com/properties/7222-princeton-ave-la-mesa-ca-91942-260008067",
+  },
 ];
 
 export function getListing(slug: string): Listing | undefined {
   return listings.find((l) => l.slug === slug);
 }
 
-export function getListingPhotos(slug: string): string[] {
-  const dir = path.join(process.cwd(), "public", "listings", slug);
-  if (!existsSync(dir)) return [];
-  return readdirSync(dir)
-    .filter((f) => /\.(webp|jpg|jpeg|png)$/i.test(f))
-    .sort()
-    .map((f) => `/listings/${slug}/${f}`);
-}
+export const activeListings = listings.filter((l) => l.status === "For Sale");
+export const soldListings = listings.filter((l) => l.status === "Sold");
 
 export function formatPrice(price: number): string {
   return "$" + price.toLocaleString("en-US");
-}
-
-// Build-time video-existence contract: the video agents drop files into
-// public/videos/<slug>/ and the sections auto-enable on the next deploy.
-export function getVideoState(slug: string, leadPhoto: string | undefined) {
-  const dir = path.join(process.cwd(), "public", "videos", slug);
-  const has = (f: string) => existsSync(path.join(dir, f));
-  const poster = (f: string, fallback: string | undefined) =>
-    has(f) ? `/videos/${slug}/${f}` : fallback;
-  return {
-    walkthrough: has("walkthrough.mp4")
-      ? {
-          src: `/videos/${slug}/walkthrough.mp4`,
-          poster: poster("poster-walkthrough.jpg", leadPhoto),
-        }
-      : null,
-    flyover: has("flyover.mp4")
-      ? {
-          src: `/videos/${slug}/flyover.mp4`,
-          poster: poster("poster-flyover.jpg", leadPhoto),
-        }
-      : null,
-  };
 }
