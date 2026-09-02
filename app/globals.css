@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 html {
@@ -17,32 +17,145 @@ html {
 }
 
 body {
-  @apply bg-ink text-paper font-sans antialiased;
+  @apply bg-porcelain text-ink font-sans antialiased;
 }
 
 ::selection {
-  background-color: #f0818a;
-  color: #161120;
+  background-color: #9a7b3f;
+  color: #fff;
 }
 
 .eyebrow {
-  @apply text-xs uppercase text-muted;
-  letter-spacing: 0.18em;
+  @apply text-[11px] font-semibold uppercase text-brass-deep;
+  letter-spacing: 0.24em;
 }
 
-.coral-gradient-text {
-  background-image: linear-gradient(100deg, #f0818a, #f3a699);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.hero-fallback-glow {
-  background:
-    radial-gradient(ellipse 60% 50% at 70% 40%, rgba(240, 129, 138, 0.14), transparent 70%),
-    radial-gradient(ellipse 40% 40% at 30% 70%, rgba(243, 166, 153, 0.08), transparent 70%);
+.eyebrow-light {
+  @apply text-[11px] font-semibold uppercase text-brass-pale;
+  letter-spacing: 0.24em;
 }
 
 .tabular {
   font-variant-numeric: tabular-nums;
+}
+
+/* Gold hairline used under section headings */
+.gold-rule {
+  @apply mt-5 h-px w-16 bg-brass;
+}
+
+/* Animated underline for nav / text links */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.link-underline:hover::after,
+.link-underline:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* Values marquee */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee 36s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* Slow ken-burns drift for hero imagery */
+@keyframes kenburns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+.kenburns {
+  animation: kenburns 18s ease-out forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .kenburns {
+    animation: none;
+  }
+}
+
+/* Buttons */
+.btn-gold {
+  @apply inline-flex items-center justify-center gap-2 bg-brass-deep px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.14em] text-white transition-all duration-300 hover:bg-[#63501e] hover:shadow-lg;
+}
+.btn-outline-dark {
+  @apply inline-flex items-center justify-center gap-2 border border-ink/30 px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.14em] text-ink transition-all duration-300 hover:border-brass hover:text-brass-deep;
+}
+.btn-outline-light {
+  @apply inline-flex items-center justify-center gap-2 border border-white/40 px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.14em] text-white transition-all duration-300 hover:border-brass-pale hover:text-brass-pale;
+}
+
+/* Form fields */
+.field {
+  @apply w-full border border-line bg-card px-4 py-3 text-[15px] text-ink placeholder:text-stone/60 outline-none transition-colors focus:border-brass;
+}
+.field-label {
+  @apply mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.18em] text-stone;
+}
+
+/* Leaflet map container */
+.map-shell {
+  @apply relative z-0 h-full w-full;
+}
+.map-shell .leaflet-container {
+  height: 100%;
+  width: 100%;
+  background: #efe9dd;
+  font: inherit;
+}
+.map-pin {
+  background: transparent;
+  border: none;
+}
+.map-pin-dot {
+  width: 30px;
+  height: 30px;
+  border-radius: 50% 50% 50% 0;
+  background: #9a7b3f;
+  border: 2px solid #fff;
+  transform: rotate(-45deg);
+  box-shadow: 0 2px 8px rgba(20, 18, 13, 0.4);
+}
+.map-pin-dot::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background: #fff;
+}
+.map-shell .leaflet-popup-content-wrapper {
+  border-radius: 4px;
+  padding: 0;
+  overflow: hidden;
+}
+.map-shell .leaflet-popup-content {
+  margin: 0;
+  width: 220px !important;
 }

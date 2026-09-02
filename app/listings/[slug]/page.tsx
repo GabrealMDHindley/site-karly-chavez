@@ -2,16 +2,15 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import Reveal from "@/components/Reveal";
+import { Reveal } from "@/components/motion";
 import Gallery from "@/components/Gallery";
 import VideoSection from "@/components/VideoSection";
-import {
-  listings,
-  getListing,
-  getListingPhotos,
-  getVideoState,
-  formatPrice,
-} from "@/lib/listings";
+import ListingCard from "@/components/ListingCard";
+import MortgageCalculator from "@/components/MortgageCalculator";
+import ListingMap from "@/components/ListingMap";
+import { listings, getListing, formatPrice } from "@/lib/listings";
+import { getListingPhotos, getVideoState } from "@/lib/listings-server";
+import { site } from "@/lib/site";
 
 export function generateStaticParams() {
   return listings.map((l) => ({ slug: l.slug }));
@@ -46,11 +45,41 @@ export default async function ListingPage({
   const lead = photos[0];
   const videos = getVideoState(slug, lead);
   const fullAddress = `${listing.address}, ${listing.city}, ${listing.state} ${listing.zip}`;
+  const sold = listing.status === "Sold";
+
+  const more = listings
+    .filter((l) => l.slug !== slug && l.status === listing.status)
+    .slice(0, 3);
+
+  const factRows: [string, string | null][] = [
+    ["Status", listing.status],
+    ["Property Type", listing.propertyType],
+    ["MLS® ID", listing.mls],
+    ["Year Built", String(listing.yearBuilt)],
+    ["Living Area", `${listing.sqft.toLocaleString("en-US")} Sq.Ft.`],
+    ["Lot Size", listing.lot],
+    ["Neighborhood", listing.neighborhood],
+    ["Stories", listing.stories ? String(listing.stories) : null],
+    ["Garage Spaces", listing.garage],
+    ["Parking", listing.parking],
+    ["Pool", listing.pool],
+    ["Roof", listing.roof],
+    ["Heating", listing.heat],
+    ["Cooling", listing.cooling],
+    ["Flooring", listing.flooring],
+    ["Fireplace", listing.fireplace],
+    ["Laundry", listing.laundry],
+    ["Appliances", listing.appliances],
+    ["Water", listing.water],
+    ["Sewer", listing.sewer],
+    ["Zoning", listing.zoning],
+    ["HOA", listing.hoa],
+  ];
 
   return (
-    <div className="pt-16">
+    <div>
       {/* Lead photo header */}
-      <section className="relative h-[60svh] min-h-[380px]">
+      <section className="relative h-[72svh] min-h-[440px] bg-night">
         {lead && (
           <Image
             src={lead}
@@ -62,36 +91,47 @@ export default async function ListingPage({
           />
         )}
         <div
-          className="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-ink/10"
+          className="absolute inset-0 bg-gradient-to-t from-night via-night/25 to-night/45"
           aria-hidden="true"
         />
         <div className="absolute inset-x-0 bottom-0">
-          <div className="mx-auto max-w-6xl px-5 pb-10">
-            <p className="eyebrow">{listing.status}</p>
-            <h1 className="mt-2 font-display text-[clamp(2rem,5vw,3.75rem)] leading-tight">
-              {listing.address},{" "}
-              <span className="coral-gradient-text">{listing.city}</span>
+          <div className="mx-auto max-w-shell px-5 pb-12">
+            <span
+              className={`inline-block px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white ${
+                sold ? "bg-white/15" : "bg-brass"
+              }`}
+            >
+              {listing.status}
+            </span>
+            <h1 className="mt-4 font-display text-[clamp(2rem,5vw,3.6rem)] font-light leading-tight text-white">
+              {listing.address}
             </h1>
-            <p className="mt-2 font-display text-3xl text-coral">
-              {formatPrice(listing.price)}
-            </p>
+            <div className="mt-2 flex flex-wrap items-baseline gap-x-6 gap-y-1">
+              <p className="text-[15px] text-white/70">
+                {listing.city}, {listing.state} {listing.zip}
+                {listing.neighborhood ? ` · ${listing.neighborhood}` : ""}
+              </p>
+              <p className="tabular font-display text-3xl text-brass-pale">
+                {formatPrice(listing.price)}
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Specs */}
-      <section className="border-b border-line/40 bg-surface/50">
-        <div className="tabular mx-auto grid max-w-6xl grid-cols-2 gap-6 px-5 py-8 text-center sm:grid-cols-5">
+      {/* Specs strip */}
+      <section className="border-b border-line bg-card">
+        <div className="tabular mx-auto grid max-w-shell grid-cols-2 gap-6 px-5 py-9 text-center sm:grid-cols-5">
           {[
             [String(listing.beds), "Bedrooms"],
             [String(listing.baths), "Bathrooms"],
             [listing.sqft.toLocaleString("en-US"), "Sq.Ft."],
             [String(listing.yearBuilt), "Year Built"],
-            [listing.hoa, "HOA"],
+            [listing.lot ?? listing.propertyType, listing.lot ? "Lot" : "Type"],
           ].map(([v, label]) => (
             <div key={label}>
-              <p className="font-display text-2xl text-paper">{v}</p>
-              <p className="mt-1 text-xs uppercase tracking-widest text-muted">
+              <p className="font-display text-2xl text-ink">{v}</p>
+              <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-stone">
                 {label}
               </p>
             </div>
@@ -99,48 +139,87 @@ export default async function ListingPage({
         </div>
       </section>
 
-      {/* Description + features */}
-      <section className="mx-auto grid max-w-6xl gap-12 px-5 py-16 md:grid-cols-[3fr_2fr]">
-        <Reveal>
-          <p className="eyebrow">The Home</p>
-          <h2 className="mt-2 font-display text-3xl">About this residence</h2>
-          <p className="mt-6 leading-relaxed text-paper/85">
-            {listing.description}
-          </p>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <div className="rounded-2xl border border-line/50 bg-surface p-7">
+      {/* Description + facts */}
+      <section className="mx-auto grid max-w-shell gap-14 px-5 py-20 lg:grid-cols-[3fr_2fr]">
+        <div>
+          <Reveal>
+            <p className="eyebrow">The Home</p>
+            <h2 className="mt-3 font-display text-3xl font-light text-ink">
+              About this {listing.propertyType === "Multi-Family" ? "property" : "residence"}
+            </h2>
+            <div className="gold-rule" aria-hidden="true" />
+            <p className="mt-7 leading-[1.85] text-ink/80">{listing.description}</p>
+          </Reveal>
+          <Reveal delay={0.1} className="mt-10">
             <p className="eyebrow">Highlights</p>
-            <ul className="mt-4 space-y-3 text-sm text-paper/85">
+            <ul className="mt-5 grid gap-x-8 gap-y-3 text-[14.5px] text-ink/80 sm:grid-cols-2">
               {listing.features.map((f) => (
                 <li key={f} className="flex items-start gap-3">
-                  <span aria-hidden="true" className="mt-0.5 text-coral">
+                  <span aria-hidden="true" className="mt-0.5 text-brass">
                     ◆
                   </span>
                   {f}
                 </li>
               ))}
             </ul>
-            <p className="tabular mt-6 border-t border-line/50 pt-4 text-xs text-muted">
-              MLS #{listing.mls}
+          </Reveal>
+        </div>
+        <Reveal delay={0.15}>
+          <div className="border border-line bg-card p-7">
+            <p className="eyebrow">Property Facts</p>
+            <dl className="mt-5 divide-y divide-line text-sm">
+              {factRows
+                .filter(([, v]) => v)
+                .map(([k, v]) => (
+                  <div key={k} className="flex justify-between gap-6 py-2.5">
+                    <dt className="shrink-0 text-stone">{k}</dt>
+                    <dd className="text-right font-medium text-ink">{v}</dd>
+                  </div>
+                ))}
+            </dl>
+          </div>
+          <div className="mt-6 bg-night p-7 text-center">
+            <p className="font-display text-xl text-white">
+              {sold ? "Curious what your home could sell for?" : `See ${listing.address} with Karly`}
             </p>
+            <p className="mt-2 text-[13px] leading-relaxed text-white/60">
+              {sold
+                ? "We secured top dollar here — let's talk about your property."
+                : "Schedule a private showing or ask anything about this home."}
+            </p>
+            <div className="mt-6 grid gap-3">
+              <Link
+                href={
+                  sold
+                    ? "/home-valuation"
+                    : `/contact?intent=buy&about=${encodeURIComponent(`${listing.address}, ${listing.city}`)}`
+                }
+                className="btn-gold w-full"
+              >
+                {sold ? "Get a Home Valuation" : "Request a Showing"}
+              </Link>
+              <a href={site.phoneHref} className="btn-outline-light tabular w-full">
+                {site.phone}
+              </a>
+            </div>
           </div>
         </Reveal>
       </section>
 
       {/* Gallery */}
-      <section className="mx-auto max-w-6xl px-5 pb-16">
-        <Reveal>
-          <p className="eyebrow">Gallery</p>
-          <h2 className="mb-8 mt-2 font-display text-3xl">
-            Inside {listing.address}
-          </h2>
-        </Reveal>
-        <Gallery photos={photos} address={fullAddress} />
-      </section>
+      {photos.length > 1 && (
+        <section className="mx-auto max-w-shell px-5 pb-16">
+          <Reveal>
+            <p className="eyebrow">Gallery</p>
+            <h2 className="mb-9 mt-3 font-display text-3xl font-light text-ink">
+              Inside {listing.address}
+            </h2>
+          </Reveal>
+          <Gallery photos={photos} address={fullAddress} />
+        </section>
+      )}
 
-      {/* Video sections — rendered only when the files exist (video agents
-          deliver them; the section auto-enables on the next deploy). */}
+      {/* Video sections — only render when the files exist (5 Spinnaker Way). */}
       {videos.walkthrough && (
         <VideoSection
           eyebrow="Step Inside"
@@ -158,31 +237,65 @@ export default async function ListingPage({
         />
       )}
 
-      {/* Attribution + CTA */}
-      <section className="mx-auto max-w-6xl px-5 py-16">
-        <Reveal className="rounded-2xl border border-line/50 bg-surface p-8 text-center">
-          <h2 className="font-display text-3xl">
-            See {listing.address} with Karly
+      {/* Map */}
+      <section className="mx-auto max-w-shell px-5 py-16">
+        <Reveal>
+          <p className="eyebrow">Location</p>
+          <h2 className="mb-9 mt-3 font-display text-3xl font-light text-ink">
+            {listing.city}, California
           </h2>
-          <p className="mx-auto mt-3 max-w-md text-muted">
-            Schedule a private showing or ask anything about this home.
-          </p>
-          <div className="mt-6 flex justify-center gap-4">
-            <Link
-              href="/contact"
-              className="rounded-full bg-coral px-7 py-3 text-sm font-medium text-ink transition-transform hover:scale-[1.03]"
-            >
-              Request a Showing
-            </Link>
-            <a
-              href="tel:+16194951339"
-              className="rounded-full border border-paper/25 px-7 py-3 text-sm text-paper transition-colors hover:border-coral hover:text-coral"
-            >
-              (619) 495-1339
-            </a>
-          </div>
         </Reveal>
-        <p className="mt-10 text-center text-xs leading-relaxed text-muted">
+        <ListingMap
+          markers={[
+            {
+              lat: listing.lat,
+              lng: listing.lng,
+              title: listing.address,
+              subtitle: `${listing.city}, ${listing.state} ${listing.zip}`,
+              photo: lead,
+            },
+          ]}
+        />
+      </section>
+
+      {/* Mortgage calculator for active listings */}
+      {!sold && (
+        <section className="bg-cream py-20">
+          <div className="mx-auto max-w-shell px-5">
+            <Reveal>
+              <p className="eyebrow">Plan Your Payment</p>
+              <h2 className="mb-10 mt-3 font-display text-3xl font-light text-ink">
+                Mortgage calculator
+              </h2>
+            </Reveal>
+            <MortgageCalculator initialPrice={listing.price} />
+          </div>
+        </section>
+      )}
+
+      {/* More like this */}
+      {more.length > 0 && (
+        <section className="mx-auto max-w-shell px-5 py-20">
+          <Reveal>
+            <p className="eyebrow">Keep Exploring</p>
+            <h2 className="mb-9 mt-3 font-display text-3xl font-light text-ink">
+              More {sold ? "past transactions" : "properties"}
+            </h2>
+          </Reveal>
+          <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+            {more.map((l) => (
+              <ListingCard
+                key={l.slug}
+                listing={l}
+                photo={getListingPhotos(l.slug)[0]}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section className="mx-auto max-w-shell px-5 pb-16">
+        <p className="text-center text-xs leading-relaxed text-stone">
           {listing.attribution}
         </p>
       </section>

@@ -1,89 +1,132 @@
 import type { Metadata } from "next";
-import Reveal from "@/components/Reveal";
+import Image from "next/image";
+import { Suspense } from "react";
+import PageHero from "@/components/PageHero";
+import LeadForm from "@/components/LeadForm";
+import ListingMap from "@/components/ListingMap";
+import { Reveal } from "@/components/motion";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Contact",
+  title: "Contact Us — Buy, Sell, or Refinance",
   description:
-    "Contact Karly Chavez, Key Connections Real Estate — (619) 495-1339, Karly@keyconnectionsrealty.com, 333 H Street, Chula Vista, CA 91910.",
+    "Let's connect. Tell us whether you're looking to buy, sell, or refinance and Karly Chavez and the Key Connections team will reach out with a plan.",
 };
 
-const rows = [
-  {
-    label: "Phone",
-    value: site.phone,
-    href: site.phoneHref,
-    note: "Call or text — English y Español",
-  },
-  {
-    label: "Email",
-    value: site.email,
-    href: `mailto:${site.email}`,
-    note: "Replies within a business day",
-  },
-  {
-    label: "Office",
-    value: site.address,
-    href: "https://maps.google.com/?q=333+H+Street,+Chula+Vista,+CA+91910",
-    note: "Key Connections Real Estate",
-  },
-];
+export default async function ContactPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ intent?: string; about?: string }>;
+}) {
+  const { intent, about } = await searchParams;
+  const initialMessage = about
+    ? `I'd like to schedule a showing of ${about}.`
+    : "";
 
-export default function ContactPage() {
   return (
-    <div className="pt-16">
-      <section className="mx-auto max-w-4xl px-5 py-20">
-        <Reveal>
-          <p className="eyebrow">Contact</p>
-          <h1 className="mt-2 font-display text-5xl leading-tight">
-            Let’s make your{" "}
-            <span className="coral-gradient-text">connection</span>.
-          </h1>
-          <p className="mt-4 max-w-xl text-muted">
-            Buying, selling, or investing across {site.serviceAreas} — reach
-            Karly directly. Hablo Español.
-          </p>
-        </Reveal>
+    <div>
+      <PageHero
+        eyebrow="Contact Us"
+        title="Let's Connect"
+        intro="Fill out the form below to learn more about buying or selling a house in your area — we'll reach out with real answers and a plan. Hablamos Español."
+        image="/images/contact/lets-connect.webp"
+        compact
+      />
 
-        <div className="mt-12 space-y-5">
-          {rows.map((r, i) => (
-            <Reveal key={r.label} delay={i * 0.08}>
-              <a
-                href={r.href}
-                target={r.label === "Office" ? "_blank" : undefined}
-                rel={r.label === "Office" ? "noopener noreferrer" : undefined}
-                className="group flex flex-col gap-1 rounded-2xl border border-line/50 bg-surface p-7 transition-colors hover:border-coral/50 sm:flex-row sm:items-center sm:justify-between"
-              >
+      <section className="mx-auto max-w-shell px-5 py-16">
+        <div className="grid gap-12 lg:grid-cols-[1.7fr_1fr]">
+          <Reveal className="border border-line bg-porcelain p-6 md:p-10">
+            <Suspense>
+              <LeadForm initialIntent={intent} initialMessage={initialMessage} />
+            </Suspense>
+          </Reveal>
+
+          <div className="space-y-6">
+            <Reveal delay={0.1} className="border border-line bg-card p-7">
+              <div className="flex items-center gap-4">
+                <Image
+                  src="/images/team/karly-chavez.webp"
+                  alt="Karly Chavez"
+                  width={72}
+                  height={72}
+                  className="h-16 w-16 rounded-full object-cover"
+                />
                 <div>
-                  <p className="eyebrow">{r.label}</p>
-                  <p className="mt-1 text-xl text-paper transition-colors group-hover:text-coral">
-                    {r.value}
+                  <p className="font-display text-xl text-ink">{site.name}</p>
+                  <p className="text-[12px] uppercase tracking-[0.14em] text-stone">
+                    Founder | REALTOR® · {site.dreAgent}
                   </p>
                 </div>
-                <p className="text-sm text-muted">{r.note}</p>
-              </a>
+              </div>
+              <dl className="mt-6 space-y-3 text-sm">
+                <div>
+                  <dt className="field-label">Phone</dt>
+                  <dd>
+                    <a
+                      href={site.phoneHref}
+                      className="tabular text-ink hover:text-brass-deep"
+                    >
+                      {site.phone}
+                    </a>
+                  </dd>
+                </div>
+                <div>
+                  <dt className="field-label">Email</dt>
+                  <dd>
+                    <a
+                      href={`mailto:${site.email}`}
+                      className="break-all text-ink hover:text-brass-deep"
+                    >
+                      {site.email}
+                    </a>
+                  </dd>
+                </div>
+                <div>
+                  <dt className="field-label">Office</dt>
+                  <dd className="text-ink">{site.address}</dd>
+                </div>
+                <div>
+                  <dt className="field-label">Broker of Record</dt>
+                  <dd className="text-ink">
+                    {site.broker.name} · {site.broker.license}
+                  </dd>
+                </div>
+              </dl>
             </Reveal>
-          ))}
-        </div>
 
-        <Reveal delay={0.3} className="mt-12">
-          <div className="rounded-2xl border border-line/50 bg-surface p-7">
-            <p className="eyebrow">Follow</p>
-            <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
-              {site.socials.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-paper/85 transition-colors hover:text-coral"
-                >
-                  {s.label}
-                </a>
-              ))}
-            </div>
+            <Reveal delay={0.18}>
+              <ListingMap
+                className="h-[300px]"
+                zoom={15}
+                markers={[
+                  {
+                    lat: site.office.lat,
+                    lng: site.office.lng,
+                    title: "Key Connections Real Estate",
+                    subtitle: site.address,
+                  },
+                ]}
+              />
+            </Reveal>
+
+            <Reveal delay={0.24} className="bg-night p-7">
+              <p className="eyebrow-light">Follow Along</p>
+              <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+                {site.socials.map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="link-underline text-[13px] uppercase tracking-[0.12em] text-white/75 hover:text-brass-pale"
+                  >
+                    {s.label}
+                  </a>
+                ))}
+              </div>
+            </Reveal>
           </div>
-        </Reveal>
+        </div>
       </section>
     </div>
   );
